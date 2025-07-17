@@ -1,0 +1,151 @@
+{
+  "users": [
+    {
+      "name": "rabbit",
+      "password": "rabbit_pwd",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "tycho"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "rabbit",
+      "vhost": "tycho",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "queues": [
+    {
+      "name": "tycho-box-thumbnail",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-boxes-remove",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-boxes-change-corpus",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-comments-insert",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-comments-remove",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-comments-change-corpus",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-document-revision",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-document-thumbnail",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-io-export",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-io-ready",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-user-tracking",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-document-inconsistency",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-page-backup",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-page-undo",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-lexicon-feed",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-lexicon-feed-ready",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-abbreviation-feed",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "tycho-alert-message",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ]
+}
