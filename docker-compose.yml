@@ -3,12 +3,12 @@ networks:
     name: tycho-network
     driver: bridge
     driver_opts:
-      com.docker.network.bridge.default_bridge: "false"
-      com.docker.network.bridge.enable_icc: "true"
-      com.docker.network.bridge.enable_ip_masquerade: "true"
-      com.docker.network.bridge.host_binding_ipv4: "0.0.0.0"
-      com.docker.network.bridge.name: "docker1"
-      com.docker.network.driver.mtu: "1500"
+      com.docker.network.bridge.default_bridge: 'false'
+      com.docker.network.bridge.enable_icc: 'true'
+      com.docker.network.bridge.enable_ip_masquerade: 'true'
+      com.docker.network.bridge.host_binding_ipv4: '0.0.0.0'
+      com.docker.network.bridge.name: 'docker1'
+      com.docker.network.driver.mtu: '1500'
     ipam:
       config:
         - subnet: 172.18.0.0/16
@@ -34,7 +34,7 @@ services:
     container_name: mongodb
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - '27017:27017'
     networks:
       tycho-network:
         ipv4_address: 172.18.0.98
@@ -44,7 +44,7 @@ services:
       - ${DEFAULT_ROOT_FOLDER}/mongo/db:/data/db
       - ./conf/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     depends_on:
-      - rabbit
+      - rabbitmq
 
   eureka:
     image: tycho-eureka:latest
@@ -81,12 +81,36 @@ services:
     image: tycho-apache:latest
     restart: unless-stopped
     ports:
-      - "80:80"
+      - '80:80'
     networks:
       tycho-network:
         ipv4_address: 172.18.0.99
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/httpd:${DEFAULT_ROOT_FOLDER}/httpd
+
+  tycho-auth-api:
+    image: tycho-auth-api:latest
+    container_name: tycho-auth-api
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.52
+    depends_on:
+      - gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE=${ENV}
+    env_file:
+      - ${ENV_FILE}
+
+  tycho-auth-front:
+    image: tycho-auth-front:latest
+    container_name: tycho-auth-front
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.55
+    depends_on:
+      - gateway
 
   tycho-admin-front:
     image: tycho-admin-front:latest
@@ -209,24 +233,10 @@ services:
     container_name: tycho-comments-api
     restart: unless-stopped
     ports:
-      - "8090:8080"
+      - '8090:8080'
     networks:
       tycho-network:
         ipv4_address: 172.18.0.54
-    depends_on:
-      - gateway
-    environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
-    env_file:
-      - ${ENV_FILE}
-
-  tycho-auth-api:
-    image: tycho-auth-api:latest
-    container_name: tycho-auth-api
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.52
     depends_on:
       - gateway
     environment:
