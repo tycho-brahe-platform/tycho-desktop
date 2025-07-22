@@ -1,0 +1,91 @@
+networks:
+  tycho-network:
+    name: tycho-network
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.default_bridge: 'false'
+      com.docker.network.bridge.enable_icc: 'true'
+      com.docker.network.bridge.enable_ip_masquerade: 'true'
+      com.docker.network.bridge.host_binding_ipv4: '0.0.0.0'
+      com.docker.network.bridge.name: 'docker1'
+      com.docker.network.driver.mtu: '1500'
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.98
+    volumes:
+      - ./conf/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ${DEFAULT_ROOT_FOLDER}/backup:/data/backup
+      - ${DEFAULT_ROOT_FOLDER}/mongo/configdb:/data/configdb
+      - ${DEFAULT_ROOT_FOLDER}/mongo/db:/data/db
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: DockerfileRabbit
+    container_name: rabbitmq
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.97
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/rabbitmq:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    depends_on:
+      - mongodb
+
+  eureka:
+    image: tychobrahe/tycho-eureka:latest
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.95
+    depends_on:
+      - mongodb
+
+  configserver:
+    image: tychobrahe/tycho-configserver:latest
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.91
+    depends_on:
+      - eureka
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+
+  gateway:
+    image: tychobrahe/tycho-gateway:latest
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.90
+    depends_on:
+      - configserver
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+    env_file:
+      - .env
+
+  apache:
+    image: tychobrahe/tycho-apache:latest
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.99
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
