@@ -1,4 +1,5 @@
 #!/bin/bash
+export DOCKER_PLATFORM="linux/arm64"
 
 echo "Welcome to the Tycho Desktop Installer for macOS"
 

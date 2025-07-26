@@ -17,6 +17,7 @@ services:
   mongodb:
     image: mongo:4.4
     container_name: mongodb
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     ports:
       - '27017:27017'
@@ -34,6 +35,7 @@ services:
       context: .
       dockerfile: DockerfileRabbit
     container_name: rabbitmq
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -48,6 +50,7 @@ services:
 
   eureka:
     image: tychobrahe/tycho-eureka:latest
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -57,6 +60,7 @@ services:
 
   configserver:
     image: tychobrahe/tycho-configserver:latest
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -68,6 +72,7 @@ services:
 
   gateway:
     image: tychobrahe/tycho-gateway:latest
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -81,6 +86,7 @@ services:
 
   apache:
     image: tychobrahe/tycho-apache:latest
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     ports:
       - '80:80'
@@ -93,6 +99,7 @@ services:
   tycho-auth-api:
     image: tychobrahe/tycho-auth-api:latest
     container_name: tycho-auth-api
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -107,6 +114,7 @@ services:
   tycho-auth-front:
     image: tychobrahe/tycho-auth-front:latest
     container_name: tycho-auth-front
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -117,6 +125,7 @@ services:
   tycho-catalog-front:
     image: tychobrahe/tycho-catalog-front:latest
     container_name: tycho-catalog-front
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -127,6 +136,7 @@ services:
   tycho-catalog-api:
     image: tychobrahe/tycho-catalog-api:latest
     container_name: tycho-catalog-api
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -141,6 +151,7 @@ services:
   tycho-admin-front:
     image: tychobrahe/tycho-admin-front:latest
     container_name: tycho-admin-front
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -151,6 +162,7 @@ services:
   tycho-admin-api:
     image: tychobrahe/tycho-admin-api:latest
     container_name: tycho-admin-api
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -165,6 +177,7 @@ services:
   tycho-functions-api:
     image: tychobrahe/tycho-functions-api:latest
     container_name: tycho-functions-api
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -183,6 +196,7 @@ services:
   tycho-search-front:
     image: tychobrahe/tycho-search-front:latest
     container_name: tycho-search-front
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -193,6 +207,7 @@ services:
   tycho-search-api:
     image: tychobrahe/tycho-search-api:latest
     container_name: tycho-search-api
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -209,6 +224,7 @@ services:
   tycho-parser-front:
     image: tychobrahe/tycho-parser-front:latest
     container_name: tycho-parser-front
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -219,6 +235,7 @@ services:
   tycho-parser-api:
     image: tychobrahe/tycho-parser-api:latest
     container_name: tycho-parser-api
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -233,6 +250,7 @@ services:
   tycho-parser-engine-api:
     image: tychobrahe/tycho-parser-engine-api:latest
     container_name: tycho-parser-engine-api
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -249,6 +267,7 @@ services:
   tycho-io-front:
     image: tychobrahe/tycho-io-front:latest
     container_name: tycho-io-front
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -259,6 +278,7 @@ services:
   tycho-io-api:
     image: tychobrahe/tycho-io-api:latest
     container_name: tycho-io-api
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -275,6 +295,7 @@ services:
   tycho-revision-front:
     image: tychobrahe/tycho-revision-front:latest
     container_name: tycho-revision-front
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
@@ -285,6 +306,7 @@ services:
   tycho-revision-api:
     image: tychobrahe/tycho-revision-api:latest
     container_name: tycho-revision-api
+    platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
       tycho-network:
