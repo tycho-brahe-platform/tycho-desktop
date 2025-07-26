@@ -1,4 +1,3 @@
-networks:
 services:
   tycho-auth-api:
     image: tychobrahe/tycho-auth-api:latest
