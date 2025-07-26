@@ -10,7 +10,7 @@ export DEFAULT_ROOT_FOLDER="$ROOT_FOLDER"
 
 # Step 2: Download compacted file from Github
 echo "Downloading the Tycho Desktop package..."
-curl -L -o tycho-desktop.zip https://github.com/tycho-brahe-platform/tycho-desktop/blob/main/install/tycho-desktop.zip
+curl -L -o tycho-desktop.zip https://github.com/tycho-brahe-platform/tycho-desktop/raw/main/install/tycho-desktop.zip
 
 # Step 3: Extract files to the root folder
 echo "Extracting files..."
