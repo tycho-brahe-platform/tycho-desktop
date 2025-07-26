@@ -25,15 +25,11 @@ mkdir -p "$ROOT_FOLDER/httpd" "$ROOT_FOLDER/httpd/upload" "$ROOT_FOLDER/httpd/pa
 echo "Copying shell scripts..."
 cp -R "$ROOT_FOLDER/scripts/"* "$ROOT_FOLDER/backup"
 
-# Step 6: Execute Docker Compose file: docker-compose-infra.yml
-echo "Executing docker-compose-infra.yml..."
-docker-compose -f "$ROOT_FOLDER/docker-compose-infra.yml" up -d
+# Step 6: Execute Docker Compose file: docker-compose.yml
+echo "Executing docker-compose.yml..."
+docker-compose -f "$ROOT_FOLDER/docker-compose.yml" up -d
 
-# Step 7: Execute Docker Compose file: docker-compose-basic.yml
-echo "Executing docker-compose-basic.yml..."
-docker-compose -f "$ROOT_FOLDER/docker-compose-basic.yml" up -d
-
-# Step 8: Open Chrome at http://local.tychoplatform.com/auth
+# Step 7: Open Chrome at http://local.tychoplatform.com/auth
 echo "Opening Chrome to http://local.tychoplatform.com/auth"
 open -a "Google Chrome" "http://local.tychoplatform.com/auth"
 

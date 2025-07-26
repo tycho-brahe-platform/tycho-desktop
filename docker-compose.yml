@@ -14,6 +14,21 @@ networks:
         - subnet: 172.18.0.0/16
 
 services:
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.98
+    volumes:
+      - ./conf/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ${DEFAULT_ROOT_FOLDER}/backup:/data/backup
+      - ${DEFAULT_ROOT_FOLDER}/mongo/configdb:/data/configdb
+      - ${DEFAULT_ROOT_FOLDER}/mongo/db:/data/db
+
   rabbitmq:
     build:
       context: .
@@ -26,28 +41,13 @@ services:
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/rabbitmq:/var/lib/rabbitmq
     environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-
-  mongodb:
-    image: mongo:4.4
-    container_name: mongodb
-    restart: unless-stopped
-    ports:
-      - '27017:27017'
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.98
-    volumes:
-      - ${DEFAULT_ROOT_FOLDER}/backup:/data/backup
-      - ${DEFAULT_ROOT_FOLDER}/mongo/configdb:/data/configdb
-      - ${DEFAULT_ROOT_FOLDER}/mongo/db:/data/db
-      - ./conf/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
     depends_on:
-      - rabbitmq
+      - mongodb
 
   eureka:
-    image: tycho-eureka:latest
+    image: tychobrahe/tycho-eureka:latest
     restart: unless-stopped
     networks:
       tycho-network:
@@ -56,7 +56,7 @@ services:
       - mongodb
 
   configserver:
-    image: tycho-configserver:latest
+    image: tychobrahe/tycho-configserver:latest
     restart: unless-stopped
     networks:
       tycho-network:
@@ -67,18 +67,20 @@ services:
       - SPRING_PROFILES_ACTIVE=native
 
   gateway:
-    image: tycho-gateway:latest
+    image: tychobrahe/tycho-gateway:latest
     restart: unless-stopped
     networks:
       tycho-network:
         ipv4_address: 172.18.0.90
     depends_on:
       - configserver
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
     env_file:
-      - ${ENV_FILE}
+      - .env
 
   apache:
-    image: tycho-apache:latest
+    image: tychobrahe/tycho-apache:latest
     restart: unless-stopped
     ports:
       - '80:80'
@@ -86,10 +88,10 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.99
     volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd:${DEFAULT_ROOT_FOLDER}/httpd
+      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
 
   tycho-auth-api:
-    image: tycho-auth-api:latest
+    image: tychobrahe/tycho-auth-api:latest
     container_name: tycho-auth-api
     restart: unless-stopped
     networks:
@@ -98,12 +100,12 @@ services:
     depends_on:
       - gateway
     environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
+      - SPRING_PROFILES_ACTIVE=desktop
     env_file:
-      - ${ENV_FILE}
+      - .env
 
   tycho-auth-front:
-    image: tycho-auth-front:latest
+    image: tychobrahe/tycho-auth-front:latest
     container_name: tycho-auth-front
     restart: unless-stopped
     networks:
@@ -112,32 +114,8 @@ services:
     depends_on:
       - gateway
 
-  tycho-admin-front:
-    image: tycho-admin-front:latest
-    container_name: tycho-admin-front
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.3
-    depends_on:
-      - gateway
-
-  tycho-admin-api:
-    image: tycho-admin-api:latest
-    container_name: tycho-admin-api
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.2
-    depends_on:
-      - gateway
-    environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
-    env_file:
-      - ${ENV_FILE}
-
   tycho-catalog-front:
-    image: tycho-catalog-front:latest
+    image: tychobrahe/tycho-catalog-front:latest
     container_name: tycho-catalog-front
     restart: unless-stopped
     networks:
@@ -147,7 +125,7 @@ services:
       - gateway
 
   tycho-catalog-api:
-    image: tycho-catalog-api:latest
+    image: tychobrahe/tycho-catalog-api:latest
     container_name: tycho-catalog-api
     restart: unless-stopped
     networks:
@@ -156,96 +134,54 @@ services:
     depends_on:
       - gateway
     environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
+      - SPRING_PROFILES_ACTIVE=desktop
     env_file:
-      - ${ENV_FILE}
+      - .env
 
-  tycho-revision-front:
-    image: tycho-revision-front:latest
-    container_name: tycho-revision-front
+  tycho-admin-front:
+    image: tychobrahe/tycho-admin-front:latest
+    container_name: tycho-admin-front
     restart: unless-stopped
     networks:
       tycho-network:
-        ipv4_address: 172.18.0.25
+        ipv4_address: 172.18.0.3
     depends_on:
       - gateway
 
-  tycho-revision-api:
-    image: tycho-revision-api:latest
-    container_name: tycho-revision-api
+  tycho-admin-api:
+    image: tychobrahe/tycho-admin-api:latest
+    container_name: tycho-admin-api
     restart: unless-stopped
     networks:
       tycho-network:
-        ipv4_address: 172.18.0.24
+        ipv4_address: 172.18.0.2
     depends_on:
       - gateway
     environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
+      - SPRING_PROFILES_ACTIVE=desktop
     env_file:
-      - ${ENV_FILE}
+      - .env
 
   tycho-functions-api:
-    image: tycho-functions-api:latest
+    image: tychobrahe/tycho-functions-api:latest
     container_name: tycho-functions-api
     restart: unless-stopped
     networks:
       tycho-network:
         ipv4_address: 172.18.0.51
     volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd:${DEFAULT_ROOT_FOLDER}/httpd
-      - ${DEFAULT_ROOT_FOLDER}/backup:${DEFAULT_ROOT_FOLDER}/backup
+      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
+      - ${DEFAULT_ROOT_FOLDER}/backup:/data/backup
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - gateway
     environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
+      - SPRING_PROFILES_ACTIVE=desktop
     env_file:
-      - ${ENV_FILE}
-
-  tycho-io-front:
-    image: tycho-io-front:latest
-    container_name: tycho-io-front
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.13
-    depends_on:
-      - gateway
-
-  tycho-io-api:
-    image: tycho-io-api:latest
-    container_name: tycho-io-api
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.12
-    volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd:${DEFAULT_ROOT_FOLDER}/httpd
-    depends_on:
-      - gateway
-    environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
-    env_file:
-      - ${ENV_FILE}
-
-  tycho-comments-api:
-    image: tycho-comments-api:latest
-    container_name: tycho-comments-api
-    restart: unless-stopped
-    ports:
-      - '8090:8080'
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.54
-    depends_on:
-      - gateway
-    environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
-    env_file:
-      - ${ENV_FILE}
+      - .env
 
   tycho-search-front:
-    image: tycho-search-front:latest
+    image: tychobrahe/tycho-search-front:latest
     container_name: tycho-search-front
     restart: unless-stopped
     networks:
@@ -255,39 +191,23 @@ services:
       - gateway
 
   tycho-search-api:
-    image: tycho-search-api:latest
+    image: tychobrahe/tycho-search-api:latest
     container_name: tycho-search-api
     restart: unless-stopped
     networks:
       tycho-network:
         ipv4_address: 172.18.0.4
     volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd/upload:${DEFAULT_ROOT_FOLDER}/httpd/upload
+      - ${DEFAULT_ROOT_FOLDER}/httpd/upload:/data/httpd/upload
     depends_on:
       - gateway
     environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
+      - SPRING_PROFILES_ACTIVE=desktop
     env_file:
-      - ${ENV_FILE}
-
-  tycho-parser-engine-api:
-    image: tycho-parser-engine-api:latest
-    container_name: tycho-parser-engine-api
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.53
-    volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd:${DEFAULT_ROOT_FOLDER}/httpd
-    depends_on:
-      - gateway
-    environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
-    env_file:
-      - ${ENV_FILE}
+      - .env
 
   tycho-parser-front:
-    image: tycho-parser-front:latest
+    image: tychobrahe/tycho-parser-front:latest
     container_name: tycho-parser-front
     restart: unless-stopped
     networks:
@@ -297,7 +217,7 @@ services:
       - gateway
 
   tycho-parser-api:
-    image: tycho-parser-api:latest
+    image: tychobrahe/tycho-parser-api:latest
     container_name: tycho-parser-api
     restart: unless-stopped
     networks:
@@ -306,23 +226,72 @@ services:
     depends_on:
       - gateway
     environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
+      - SPRING_PROFILES_ACTIVE=desktop
     env_file:
-      - ${ENV_FILE}
+      - .env
 
-  tycho-upload-api:
-    image: tycho-upload-api:latest
-    container_name: tycho-upload-api
+  tycho-parser-engine-api:
+    image: tychobrahe/tycho-parser-engine-api:latest
+    container_name: tycho-parser-engine-api
     restart: unless-stopped
     networks:
       tycho-network:
-        ipv4_address: 172.18.0.81
+        ipv4_address: 172.18.0.53
     volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd/upload:${DEFAULT_ROOT_FOLDER}/httpd/upload
-      - /tmp:/tmp
+      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
     depends_on:
       - gateway
     environment:
-      - SPRING_PROFILES_ACTIVE=${ENV}
+      - SPRING_PROFILES_ACTIVE=desktop
     env_file:
-      - ${ENV_FILE}
+      - .env
+
+  tycho-io-front:
+    image: tychobrahe/tycho-io-front:latest
+    container_name: tycho-io-front
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.13
+    depends_on:
+      - gateway
+
+  tycho-io-api:
+    image: tychobrahe/tycho-io-api:latest
+    container_name: tycho-io-api
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.12
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
+    depends_on:
+      - gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+    env_file:
+      - .env
+
+  tycho-revision-front:
+    image: tychobrahe/tycho-revision-front:latest
+    container_name: tycho-revision-front
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.25
+    depends_on:
+      - gateway
+
+  tycho-revision-api:
+    image: tychobrahe/tycho-revision-api:latest
+    container_name: tycho-revision-api
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.24
+    depends_on:
+      - gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+    env_file:
+      - .env
