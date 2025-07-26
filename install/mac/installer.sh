@@ -7,12 +7,12 @@ read -p "Please enter the root folder for installation (e.g., /Users/yourname/ty
 
 # Step 2: Download compacted file from Github
 echo "Downloading the Tycho Desktop package..."
-curl -L -o tycho-desktop.tar.gz https://github.com/tycho-brahe-platform/tycho-desktop/raw/install/mac/tycho-desktop.tar
+curl -L https://github.com/tycho-brahe-platform/tycho-desktop/blob/main/install/tycho-desktop.zip
 
 # Step 3: Extract files to the root folder
 echo "Extracting files..."
 mkdir -p "$ROOT_FOLDER"
-tar -xf tycho-desktop.tar -C "$ROOT_FOLDER"
+unzip tycho-desktop.zip -d "$ROOT_FOLDER"
 
 # Step 4: Create subfolders
 echo "Creating subfolders..."
