@@ -44,9 +44,9 @@ fi
 
 # Update or add BACKUP_SCRIPT_TYPE in .env
 if grep -q "^BACKUP_SCRIPT_TYPE=" "$ENV_FILE"; then
-  sed -i.bak "s|^BACKUP_SCRIPT_TYPE=.*|BACKUP_SCRIPT_TYPE=.sh|" "$ENV_FILE"
+  sed -i.bak "s|^BACKUP_SCRIPT_TYPE=.*|BACKUP_SCRIPT_TYPE=sh|" "$ENV_FILE"
 else
-  sed -i.bak "1s|^|BACKUP_SCRIPT_TYPE=.sh\n|" "$ENV_FILE"
+  sed -i.bak "1s|^|BACKUP_SCRIPT_TYPE=sh\n|" "$ENV_FILE"
 fi
 
 echo "DEFAULT_ROOT_FOLDER set to ${ROOT_FOLDER} in $ENV_FILE"
