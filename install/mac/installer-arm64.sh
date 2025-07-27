@@ -37,17 +37,23 @@ fi
 
 # Update or add DEFAULT_ROOT_FOLDER in .env
 if grep -q "^DEFAULT_ROOT_FOLDER=" "$ENV_FILE"; then
-  # Replace the line
   sed -i.bak "s|^DEFAULT_ROOT_FOLDER=.*|DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}|" "$ENV_FILE"
 else
-  # Add the variable at the top
   sed -i.bak "1s|^|DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}\n|" "$ENV_FILE"
+fi
+
+# Update or add BACKUP_SCRIPT_TYPE in .env
+if grep -q "^BACKUP_SCRIPT_TYPE=" "$ENV_FILE"; then
+  sed -i.bak "s|^BACKUP_SCRIPT_TYPE=.*|BACKUP_SCRIPT_TYPE=.sh|" "$ENV_FILE"
+else
+  sed -i.bak "1s|^|BACKUP_SCRIPT_TYPE=.sh\n|" "$ENV_FILE"
 fi
 
 echo "DEFAULT_ROOT_FOLDER set to ${ROOT_FOLDER} in $ENV_FILE"
 
 # Step 7: Execute Docker Compose file: docker-compose.yml
 echo "Executing docker-compose.yml..."
+docker-compose pull
 docker-compose -f "$ROOT_FOLDER/docker-compose.yml" up -d
 
 # Step 8: Open Chrome to sign up
