@@ -69,6 +69,8 @@ services:
       - eureka
     environment:
       - SPRING_PROFILES_ACTIVE=native
+    env_file:
+      - .env
 
   gateway:
     image: tychobrahe/tycho-gateway:latest

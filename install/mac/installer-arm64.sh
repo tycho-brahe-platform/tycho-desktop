@@ -27,7 +27,7 @@ cp -R "$ROOT_FOLDER/scripts/"* "$ROOT_FOLDER/backup"
 export DEFAULT_ROOT_FOLDER="$ROOT_FOLDER"
 
 # Path to the .env file (adjust this if the .env is in a different location)
-ENV_FILE=".env"
+ENV_FILE="$ROOT_FOLDER/.env"
 
 # Check if the .env file exists
 if [ ! -f "$ENV_FILE" ]; then
@@ -52,6 +52,6 @@ docker-compose -f "$ROOT_FOLDER/docker-compose.yml" up -d
 
 # Step 8: Open Chrome to sign up
 echo "Opening Chrome to sign up"
-open -a "Google Chrome" "http://local.tychoplatform.com/signup"
+open -a "Google Chrome" "http://local.tychoplatform.com/auth/signup"
 
 echo "Installation completed successfully."
