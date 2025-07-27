@@ -9,6 +9,26 @@ read -p "Please enter the root folder for installation (e.g., /Users/yourname/ty
 # Export the input to DEFAULT_ROOT_FOLDER environment variable
 export DEFAULT_ROOT_FOLDER="$ROOT_FOLDER"
 
+# Path to the .env file (adjust this if the .env is in a different location)
+ENV_FILE=".env"
+
+# Check if the .env file exists
+if [ ! -f "$ENV_FILE" ]; then
+  echo ".env file not found at $ENV_FILE"
+  exit 1
+fi
+
+# Update or add DEFAULT_ROOT_FOLDER in .env
+if grep -q "^DEFAULT_ROOT_FOLDER=" "$ENV_FILE"; then
+  # Replace the line
+  sed -i.bak "s|^DEFAULT_ROOT_FOLDER=.*|DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}|" "$ENV_FILE"
+else
+  # Add the variable at the top
+  sed -i.bak "1s|^|DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}\n|" "$ENV_FILE"
+fi
+
+echo "DEFAULT_ROOT_FOLDER set to ${ROOT_FOLDER} in $ENV_FILE"
+
 # Step 2: Download compacted file from Github
 echo "Downloading the Tycho Desktop package..."
 curl -L -o tycho-desktop.zip https://github.com/tycho-brahe-platform/tycho-desktop/raw/main/install/tycho-desktop.zip
@@ -30,8 +50,8 @@ cp -R "$ROOT_FOLDER/scripts/"* "$ROOT_FOLDER/backup"
 echo "Executing docker-compose.yml..."
 docker-compose -f "$ROOT_FOLDER/docker-compose.yml" up -d
 
-# Step 7: Open Chrome at http://local.tychoplatform.com/auth
-echo "Opening Chrome to http://local.tychoplatform.com/auth"
-open -a "Google Chrome" "http://local.tychoplatform.com/auth"
+# Step 7: Open Chrome to sign up
+echo "Opening Chrome to sign up"
+open -a "Google Chrome" "http://local.tychoplatform.com/signup"
 
 echo "Installation completed successfully."
