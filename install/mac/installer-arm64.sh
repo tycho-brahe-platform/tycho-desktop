@@ -22,7 +22,8 @@ mkdir -p "$ROOT_FOLDER/httpd" "$ROOT_FOLDER/httpd/upload" "$ROOT_FOLDER/httpd/pa
 # Step 5: Copy shell scripts from 'scripts' folder to 'ROOT_FOLDER/backup'
 echo "Copying shell scripts..."
 cp -R "$ROOT_FOLDER/scripts/"* "$ROOT_FOLDER/backup"
-chmod +x "$ROOT_FOLDER/scripts/*.sh"
+sed -i '' 's/\r$//' "$ROOT_FOLDER/scripts/"*.sh
+chmod +x "$ROOT_FOLDER/scripts/"*.sh
 
 # Step 6: Export the input to DEFAULT_ROOT_FOLDER environment variable
 export DEFAULT_ROOT_FOLDER="$ROOT_FOLDER"
