@@ -57,6 +57,8 @@ services:
         ipv4_address: 172.18.0.95
     depends_on:
       - mongodb
+    environment:
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
 
   configserver:
     image: tychobrahe/tycho-configserver:latest
@@ -69,6 +71,7 @@ services:
       - eureka
     environment:
       - SPRING_PROFILES_ACTIVE=native
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -83,6 +86,7 @@ services:
       - configserver
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -110,6 +114,7 @@ services:
       - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -147,6 +152,7 @@ services:
       - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -173,6 +179,7 @@ services:
       - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -192,6 +199,7 @@ services:
       - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -220,6 +228,7 @@ services:
       - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -246,6 +255,7 @@ services:
       - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -263,6 +273,7 @@ services:
       - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -291,6 +302,7 @@ services:
       - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
 
@@ -317,5 +329,6 @@ services:
       - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env

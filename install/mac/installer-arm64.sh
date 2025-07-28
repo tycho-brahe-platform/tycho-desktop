@@ -58,12 +58,45 @@ echo "Executing docker-compose.yml..."
 docker-compose pull
 docker-compose -f "$ROOT_FOLDER/docker-compose.yml" up -d
 
-echo "Waiting while services start..."
-for i in {15..1}; do
-  sleep 1
+# Step 8: check if applications are up
+sleep_seconds=2
+max_retries=30
+TYCHO_SERVER_ADDRESS=http://local.tychoplatform.com/api/
+apps=(auth catalog admin functions search parser parser/engine io revision)
+
+check_app() {
+  local app=$1
+  local retries=0
+  while [ $retries -lt $max_retries ]; do
+    status=$(curl -s "${TYCHO_SERVER_ADDRESS}${app}/actuator/health" | grep -o '"status":"UP"')
+    if [[ "$status" == '"status":"UP"' ]]; then
+      echo "✅ App $app is UP"
+      return 0
+    else
+      echo "⏳ Waiting for $app..."
+      sleep $sleep_seconds
+      ((retries++))
+    fi
+  done
+  echo "❌ App $app failed to start in time."
+  return 1
+}
+
+all_ok=true
+for app in "${apps[@]}"; do
+  check_app "$app" || all_ok=false
 done
 
-# Step 8: Open Chrome to sign up
+# Final result
+if $all_ok; then
+  echo "🎉 All applications are UP."
+  exit 0
+else
+  echo "❗ Some applications failed to start."
+  exit 1
+fi
+
+# Step 9: Open Chrome to sign up
 echo "Opening Chrome to sign up"
 open -a "Google Chrome" "http://local.tychoplatform.com/auth/signup"
 
