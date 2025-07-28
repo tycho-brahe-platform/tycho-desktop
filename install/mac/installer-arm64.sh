@@ -22,6 +22,7 @@ mkdir -p "$ROOT_FOLDER/httpd" "$ROOT_FOLDER/httpd/upload" "$ROOT_FOLDER/httpd/pa
 # Step 5: Copy shell scripts from 'scripts' folder to 'ROOT_FOLDER/backup'
 echo "Copying shell scripts..."
 cp -R "$ROOT_FOLDER/scripts/"* "$ROOT_FOLDER/backup"
+chmod +x "$ROOT_FOLDER/scripts/*.sh"
 
 # Step 6: Export the input to DEFAULT_ROOT_FOLDER environment variable
 export DEFAULT_ROOT_FOLDER="$ROOT_FOLDER"
@@ -55,6 +56,11 @@ echo "DEFAULT_ROOT_FOLDER set to ${ROOT_FOLDER} in $ENV_FILE"
 echo "Executing docker-compose.yml..."
 docker-compose pull
 docker-compose -f "$ROOT_FOLDER/docker-compose.yml" up -d
+
+echo "Waiting while services start..."
+for i in {15..1}; do
+  sleep 1
+done
 
 # Step 8: Open Chrome to sign up
 echo "Opening Chrome to sign up"
