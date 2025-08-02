@@ -1,5 +1,6 @@
 #!/bin/bash
 export DOCKER_PLATFORM="linux/arm64"
+TYCHO_SERVER_ADDRESS=http://local.tychoplatform.com
 
 echo "Welcome to the Tycho Desktop Installer for macOS"
 
@@ -58,17 +59,28 @@ echo "Executing docker-compose.yml..."
 docker-compose pull
 docker-compose -f "$ROOT_FOLDER/docker-compose.yml" up -d
 
+echo "Waiting for Eureka to be healthy..."
+until curl -sf http://${TYCHO_SERVER_ADDRESS}/eureka/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
+
+echo "Waiting for Config Server to be healthy..."
+until curl -sf http://${TYCHO_SERVER_ADDRESS}/configserver/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
+
+echo "Waiting for Gateway to be healthy..."
+until curl -sf http://${TYCHO_SERVER_ADDRESS}/gateway/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
+
+echo "Starting application containers..."
+docker-compose -f docker-compose.apps.yml up -d
+
 # Step 8: check if applications are up
 sleep_seconds=2
 max_retries=30
-TYCHO_SERVER_ADDRESS=http://local.tychoplatform.com/api/
 apps=(auth catalog admin functions search parser parser/engine io revision)
 
 check_app() {
   local app=$1
   local retries=0
   while [ $retries -lt $max_retries ]; do
-    status=$(curl -s "${TYCHO_SERVER_ADDRESS}${app}/actuator/health" | grep -o '"status":"UP"')
+    status=$(curl -s "${TYCHO_SERVER_ADDRESS}/api/${app}/actuator/health" | grep -o '"status":"UP"')
     if [[ "$status" == '"status":"UP"' ]]; then
       echo "✅ App $app is UP"
       return 0
