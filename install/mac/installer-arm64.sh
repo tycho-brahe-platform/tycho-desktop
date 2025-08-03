@@ -60,13 +60,13 @@ docker-compose pull
 docker-compose -f "$ROOT_FOLDER/docker-compose.yml" up -d
 
 echo "Waiting for Eureka to be healthy..."
-until curl -sf http://${TYCHO_SERVER_ADDRESS}/eureka/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
+until curl -sf ${TYCHO_SERVER_ADDRESS}/eureka/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
 
 echo "Waiting for Config Server to be healthy..."
-until curl -sf http://${TYCHO_SERVER_ADDRESS}/configserver/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
+until curl -sf ${TYCHO_SERVER_ADDRESS}/configserver/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
 
 echo "Waiting for Gateway to be healthy..."
-until curl -sf http://${TYCHO_SERVER_ADDRESS}/gateway/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
+until curl -sf ${TYCHO_SERVER_ADDRESS}/gateway/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
 
 echo "Starting application containers..."
 docker-compose -f docker-compose.apps.yml up -d

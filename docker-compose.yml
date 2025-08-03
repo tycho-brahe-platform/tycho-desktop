@@ -16,6 +16,7 @@ networks:
 services:
   apache:
     image: tychobrahe/tycho-apache:latest
+    container_name: apache
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     ports:
@@ -74,7 +75,10 @@ services:
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     healthcheck:
       test:
-        ['CMD', 'curl', '-f', 'http://localhost:8761/eureka/actuator/health']
+        [
+          'CMD-SHELL',
+          'curl -sf http://localhost:8761/eureka/actuator/health | grep ''"status":"UP"'' || exit 1',
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -95,7 +99,11 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8888/actuator/health']
+      test:
+        [
+          'CMD-SHELL',
+          'curl -sf http://localhost:8888/actuator/health | grep ''"status":"UP"'' || exit 1',
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -116,7 +124,11 @@ services:
     env_file:
       - .env
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:9090/actuator/health']
+      test:
+        [
+          'CMD-SHELL',
+          'curl -sf http://localhost:9090/actuator/health | grep ''"status":"UP"'' || exit 1',
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
