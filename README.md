@@ -12,3 +12,6 @@ Tasks:
 6- Execute the Docker Compose file: docker-compose-infra.yml
 7- Execute the Docker Compose file: docker-compose-basic.yml
 8- Open Chrome to http://local.tychoplatform.com/auth
+
+chmod + x installaer
+sudo add http://local.tychoplatform.com to /etc/hosts
