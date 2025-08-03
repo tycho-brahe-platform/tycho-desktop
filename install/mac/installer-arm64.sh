@@ -37,11 +37,19 @@ if [ ! -f "$ENV_FILE" ]; then
   exit 1
 fi
 
-# Update or insert variables
-sed -i.bak "/^DEFAULT_ROOT_FOLDER=/d" "$ENV_FILE"
-sed -i.bak "/^BACKUP_SCRIPT_TYPE=/d" "$ENV_FILE"
-echo "DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}" >> "$ENV_FILE"
-echo "BACKUP_SCRIPT_TYPE=sh" >> "$ENV_FILE"
+# Update or add DEFAULT_ROOT_FOLDER in .env
+if grep -q "^DEFAULT_ROOT_FOLDER=" "$ENV_FILE"; then
+  sed -i.bak "s|^DEFAULT_ROOT_FOLDER=.*|DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}|" "$ENV_FILE"
+else
+  sed -i.bak "1s|^|DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}\n|" "$ENV_FILE"
+fi
+
+# Update or add BACKUP_SCRIPT_TYPE in .env
+if grep -q "^BACKUP_SCRIPT_TYPE=" "$ENV_FILE"; then
+  sed -i.bak "s|^BACKUP_SCRIPT_TYPE=.*|BACKUP_SCRIPT_TYPE=sh|" "$ENV_FILE"
+else
+  sed -i.bak "1s|^|BACKUP_SCRIPT_TYPE=sh\n|" "$ENV_FILE"
+fi
 echo "✅ Environment variables updated in $ENV_FILE"
 
 # Step 7: Start core infrastructure (no gateway or apps yet)
