@@ -67,13 +67,6 @@ echo "⏳ Waiting for Config Server to be healthy..."
 until curl -sf ${TYCHO_SERVER_ADDRESS}/configserver/tycho-gateway/default | grep 'application' > /dev/null; do sleep 5; done
 echo "✅ Config Server is ready to serve configs."
 
-echo "⏳ Waiting for Config Server to serve configuration properties..."
-until curl -sf ${TYCHO_SERVER_ADDRESS}/configserver/tycho-gateway/default | grep '"spring.profiles"' > /dev/null; do
-  echo "   Still waiting for valid config data..."
-  sleep 5
-done
-echo "✅ Config Server is now fully operational."
-
 # Step 8: Start Gateway (after config server is ready)
 echo "🚪 Starting Gateway container..."
 docker-compose -f "$ROOT_FOLDER/docker-compose.gateway.yml" pull

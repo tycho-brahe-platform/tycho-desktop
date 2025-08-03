@@ -12,8 +12,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.52
-    depends_on:
-      - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
@@ -28,8 +26,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.55
-    depends_on:
-      - gateway
 
   tycho-catalog-front:
     image: tychobrahe/tycho-catalog-front:latest
@@ -39,8 +35,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.31
-    depends_on:
-      - gateway
 
   tycho-catalog-api:
     image: tychobrahe/tycho-catalog-api:latest
@@ -50,8 +44,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.30
-    depends_on:
-      - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
@@ -66,8 +58,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.3
-    depends_on:
-      - gateway
 
   tycho-admin-api:
     image: tychobrahe/tycho-admin-api:latest
@@ -77,8 +67,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.2
-    depends_on:
-      - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
@@ -97,8 +85,6 @@ services:
       - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
       - ${DEFAULT_ROOT_FOLDER}/backup:/data/backup
       - /var/run/docker.sock:/var/run/docker.sock
-    depends_on:
-      - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
@@ -113,8 +99,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.5
-    depends_on:
-      - gateway
 
   tycho-search-api:
     image: tychobrahe/tycho-search-api:latest
@@ -126,8 +110,6 @@ services:
         ipv4_address: 172.18.0.4
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/httpd/upload:/data/httpd/upload
-    depends_on:
-      - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
@@ -142,8 +124,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.7
-    depends_on:
-      - gateway
 
   tycho-parser-api:
     image: tychobrahe/tycho-parser-api:latest
@@ -153,8 +133,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.6
-    depends_on:
-      - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
@@ -171,8 +149,6 @@ services:
         ipv4_address: 172.18.0.53
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
-    depends_on:
-      - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
@@ -187,8 +163,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.13
-    depends_on:
-      - gateway
 
   tycho-io-api:
     image: tychobrahe/tycho-io-api:latest
@@ -200,8 +174,6 @@ services:
         ipv4_address: 172.18.0.12
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
-    depends_on:
-      - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
@@ -216,8 +188,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.25
-    depends_on:
-      - gateway
 
   tycho-revision-api:
     image: tychobrahe/tycho-revision-api:latest
@@ -227,8 +197,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.24
-    depends_on:
-      - gateway
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}

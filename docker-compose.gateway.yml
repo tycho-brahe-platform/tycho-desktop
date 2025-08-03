@@ -12,8 +12,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.90
-    depends_on:
-      - configserver
     environment:
       - SPRING_PROFILES_ACTIVE=desktop
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
