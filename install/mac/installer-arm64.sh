@@ -1,77 +1,87 @@
 #!/bin/bash
+set -e
+
 export DOCKER_PLATFORM="linux/arm64"
 TYCHO_SERVER_ADDRESS=http://local.tychoplatform.com
 
-echo "Welcome to the Tycho Desktop Installer for macOS"
+echo "🚀 Welcome to the Tycho Desktop Installer for macOS"
 
 # Step 1: Ask for the root folder to install
 read -p "Please enter the root folder for installation (e.g., /Users/yourname/tycho): " ROOT_FOLDER
 
 # Step 2: Download compacted file from Github
-echo "Downloading the Tycho Desktop package..."
+echo "📦 Downloading the Tycho Desktop package..."
 curl -L -o tycho-desktop.zip https://github.com/tycho-brahe-platform/tycho-desktop/raw/main/install/tycho-desktop.zip
 
 # Step 3: Extract files to the root folder
-echo "Extracting files..."
+echo "📂 Extracting files..."
 mkdir -p "$ROOT_FOLDER"
-unzip tycho-desktop.zip -d "$ROOT_FOLDER"
+unzip -q tycho-desktop.zip -d "$ROOT_FOLDER"
 
 # Step 4: Create subfolders
-echo "Creating subfolders..."
+echo "📁 Creating subfolders..."
 mkdir -p "$ROOT_FOLDER/httpd" "$ROOT_FOLDER/httpd/upload" "$ROOT_FOLDER/httpd/parser" "$ROOT_FOLDER/backup"
 
 # Step 5: Copy shell scripts from 'scripts' folder to 'ROOT_FOLDER/backup'
-echo "Copying shell scripts..."
+echo "🔧 Copying shell scripts..."
 cp -R "$ROOT_FOLDER/scripts/"* "$ROOT_FOLDER/backup"
-#sed -i '' 's/\r$//' "$ROOT_FOLDER/backup/"*.sh
 chmod +x "$ROOT_FOLDER/backup/"*.sh
 
-# Step 6: Export the input to DEFAULT_ROOT_FOLDER environment variable
+# Step 6: Export the input to DEFAULT_ROOT_FOLDER
 export DEFAULT_ROOT_FOLDER="$ROOT_FOLDER"
 
-# Path to the .env file (adjust this if the .env is in a different location)
+# Update .env
 ENV_FILE="$ROOT_FOLDER/.env"
-
-# Check if the .env file exists
 if [ ! -f "$ENV_FILE" ]; then
-  echo ".env file not found at $ENV_FILE"
+  echo "❌ .env file not found at $ENV_FILE"
   exit 1
 fi
 
-# Update or add DEFAULT_ROOT_FOLDER in .env
-if grep -q "^DEFAULT_ROOT_FOLDER=" "$ENV_FILE"; then
-  sed -i.bak "s|^DEFAULT_ROOT_FOLDER=.*|DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}|" "$ENV_FILE"
-else
-  sed -i.bak "1s|^|DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}\n|" "$ENV_FILE"
-fi
+# Update or insert variables
+sed -i.bak "/^DEFAULT_ROOT_FOLDER=/d" "$ENV_FILE"
+sed -i.bak "/^BACKUP_SCRIPT_TYPE=/d" "$ENV_FILE"
+echo "DEFAULT_ROOT_FOLDER=${ROOT_FOLDER}" >> "$ENV_FILE"
+echo "BACKUP_SCRIPT_TYPE=sh" >> "$ENV_FILE"
+echo "✅ Environment variables updated in $ENV_FILE"
 
-# Update or add BACKUP_SCRIPT_TYPE in .env
-if grep -q "^BACKUP_SCRIPT_TYPE=" "$ENV_FILE"; then
-  sed -i.bak "s|^BACKUP_SCRIPT_TYPE=.*|BACKUP_SCRIPT_TYPE=sh|" "$ENV_FILE"
-else
-  sed -i.bak "1s|^|BACKUP_SCRIPT_TYPE=sh\n|" "$ENV_FILE"
-fi
-
-echo "DEFAULT_ROOT_FOLDER set to ${ROOT_FOLDER} in $ENV_FILE"
-
-# Step 7: Execute Docker Compose file: docker-compose.yml
-echo "Executing docker-compose.yml..."
-docker-compose pull
+# Step 7: Start core infrastructure (no gateway or apps yet)
+echo "🐳 Starting infrastructure containers (Eureka, ConfigServer, Mongo, etc)..."
+docker-compose -f "$ROOT_FOLDER/docker-compose.yml" pull
 docker-compose -f "$ROOT_FOLDER/docker-compose.yml" up -d
 
-echo "Waiting for Eureka to be healthy..."
+# Wait for Eureka
+echo "⏳ Waiting for Eureka to be healthy..."
 until curl -sf ${TYCHO_SERVER_ADDRESS}/eureka/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
+echo "✅ Eureka is UP."
 
-echo "Waiting for Config Server to be healthy..."
-until curl -sf ${TYCHO_SERVER_ADDRESS}/configserver/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
+# Wait for Config Server
+echo "⏳ Waiting for Config Server to be healthy..."
+until curl -sf ${TYCHO_SERVER_ADDRESS}/configserver/tycho-gateway/default | grep 'application' > /dev/null; do sleep 5; done
+echo "✅ Config Server is ready to serve configs."
 
-echo "Waiting for Gateway to be healthy..."
+echo "⏳ Waiting for Config Server to serve configuration properties..."
+until curl -sf ${TYCHO_SERVER_ADDRESS}/configserver/tycho-gateway/default | grep '"spring.profiles"' > /dev/null; do
+  echo "   Still waiting for valid config data..."
+  sleep 5
+done
+echo "✅ Config Server is now fully operational."
+
+# Step 8: Start Gateway (after config server is ready)
+echo "🚪 Starting Gateway container..."
+docker-compose -f "$ROOT_FOLDER/docker-compose.gateway.yml" pull
+docker-compose -f "$ROOT_FOLDER/docker-compose.gateway.yml" up -d
+
+# Wait for Gateway
+echo "⏳ Waiting for Gateway to be healthy..."
 until curl -sf ${TYCHO_SERVER_ADDRESS}/gateway/actuator/health | grep '"status":"UP"' > /dev/null; do sleep 5; done
+echo "✅ Gateway is UP."
 
-echo "Starting application containers..."
-docker-compose -f docker-compose.apps.yml up -d
+# Step 9: Start application containers
+echo "🚀 Starting application containers..."
+docker-compose -f "$ROOT_FOLDER/docker-compose.apps.yml" pull
+docker-compose -f "$ROOT_FOLDER/docker-compose.apps.yml" up -d
 
-# Step 8: check if applications are up
+# Step 10: Check application health
 sleep_seconds=2
 max_retries=30
 apps=(auth catalog admin functions search parser parser/engine io revision)
@@ -94,22 +104,21 @@ check_app() {
   return 1
 }
 
+echo "🔍 Checking application status..."
 all_ok=true
 for app in "${apps[@]}"; do
   check_app "$app" || all_ok=false
 done
 
-# Final result
+# Step 11: Open browser
 if $all_ok; then
   echo "🎉 All applications are UP."
-  exit 0
 else
   echo "❗ Some applications failed to start."
-  exit 1
 fi
 
-# Step 9: Open Chrome to sign up
-echo "Opening Chrome to sign up"
+echo "🌐 Opening Chrome to sign up page..."
 open -a "Google Chrome" "http://local.tychoplatform.com/auth/signup"
 
-echo "Installation completed successfully."
+echo "✅ Installation completed successfully."
+exit 0

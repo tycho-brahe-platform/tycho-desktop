@@ -73,15 +73,6 @@ services:
       - mongodb
     environment:
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'curl -sf http://localhost:8761/eureka/actuator/health | grep ''"status":"UP"'' || exit 1',
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   configserver:
     image: tychobrahe/tycho-configserver:latest
@@ -98,37 +89,3 @@ services:
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
-    healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'curl -sf http://localhost:8888/actuator/health | grep ''"status":"UP"'' || exit 1',
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  gateway:
-    image: tychobrahe/tycho-gateway:latest
-    container_name: gateway
-    platform: ${DOCKER_PLATFORM}
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.90
-    depends_on:
-      - configserver
-    environment:
-      - SPRING_PROFILES_ACTIVE=desktop
-      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    env_file:
-      - .env
-    healthcheck:
-      test:
-        [
-          'CMD-SHELL',
-          'curl -sf http://localhost:9090/actuator/health | grep ''"status":"UP"'' || exit 1',
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
