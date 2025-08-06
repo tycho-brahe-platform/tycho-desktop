@@ -85,7 +85,7 @@ docker-compose -f "$ROOT_FOLDER/docker-compose.apps.yml" up -d
 # Step 10: Check application health
 sleep_seconds=2
 max_retries=30
-apps=(auth catalog admin functions search parser parser/engine io revision)
+apps=(auth functions admin catalog parser/engine parser revision search io)
 
 check_app() {
   local app=$1
