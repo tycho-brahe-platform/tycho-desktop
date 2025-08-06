@@ -83,25 +83,33 @@ docker-compose -f "$ROOT_FOLDER/docker-compose.apps.yml" pull
 docker-compose -f "$ROOT_FOLDER/docker-compose.apps.yml" up -d
 
 # Step 10: Check application health
-sleep_seconds=5
+sleep_seconds=10
 max_retries=30
 apps=(auth functions admin catalog parser/engine parser revision search io)
 
 check_app() {
   local app=$1
   local retries=0
+  local printed_waiting_msg=0
+
   while [ $retries -lt $max_retries ]; do
     status=$(curl -s "${TYCHO_SERVER_ADDRESS}/api/${app}/actuator/health" | grep -o '"status":"UP"')
     if [[ "$status" == '"status":"UP"' ]]; then
-      echo "✅ App $app is UP"
+      echo -e "\n✅ App $app is UP"
       return 0
     else
-      echo "⏳ Waiting for $app..."
+      if [ $printed_waiting_msg -eq 0 ]; then
+        echo -n "⏳ Waiting for $app"
+        printed_waiting_msg=1
+      else
+        echo -n "."
+      fi
       sleep $sleep_seconds
       ((retries++))
     fi
   done
-  echo "❌ App $app failed to start in time."
+
+  echo -e "\n❌ App $app failed to start in time."
   return 1
 }
 
