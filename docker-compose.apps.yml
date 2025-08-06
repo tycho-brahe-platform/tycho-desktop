@@ -18,6 +18,144 @@ services:
     env_file:
       - .env
 
+  tycho-functions-api:
+    image: tychobrahe/tycho-functions-api:latest
+    container_name: tycho-functions-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.51
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
+      - ${DEFAULT_ROOT_FOLDER}/backup:/data/backup
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    depends_on:
+      - tycho-auth-api
+
+  tycho-admin-api:
+    image: tychobrahe/tycho-admin-api:latest
+    container_name: tycho-admin-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.2
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    depends_on:
+      - tycho-functions-api
+
+  tycho-catalog-api:
+    image: tychobrahe/tycho-catalog-api:latest
+    container_name: tycho-catalog-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.30
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    depends_on:
+      - tycho-admin-api
+
+  tycho-parser-engine-api:
+    image: tychobrahe/tycho-parser-engine-api:latest
+    container_name: tycho-parser-engine-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.53
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    depends_on:
+      - tycho-catalog-api
+
+  tycho-parser-api:
+    image: tychobrahe/tycho-parser-api:latest
+    container_name: tycho-parser-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.6
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    depends_on:
+      - tycho-parser-engine-api
+
+  tycho-revision-api:
+    image: tychobrahe/tycho-revision-api:latest
+    container_name: tycho-revision-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.24
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    depends_on:
+      - tycho-parser-api
+
+  tycho-search-api:
+    image: tychobrahe/tycho-search-api:latest
+    container_name: tycho-search-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.4
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/httpd/upload:/data/httpd/upload
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    depends_on:
+      - tycho-revision-api
+
+  tycho-io-api:
+    image: tychobrahe/tycho-io-api:latest
+    container_name: tycho-io-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.12
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
+    environment:
+      - SPRING_PROFILES_ACTIVE=desktop
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    depends_on:
+      - tycho-search-api
+
   tycho-auth-front:
     image: tychobrahe/tycho-auth-front:latest
     container_name: tycho-auth-front
@@ -36,20 +174,6 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.31
 
-  tycho-catalog-api:
-    image: tychobrahe/tycho-catalog-api:latest
-    container_name: tycho-catalog-api
-    platform: ${DOCKER_PLATFORM}
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.30
-    environment:
-      - SPRING_PROFILES_ACTIVE=desktop
-      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    env_file:
-      - .env
-
   tycho-admin-front:
     image: tychobrahe/tycho-admin-front:latest
     container_name: tycho-admin-front
@@ -58,38 +182,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.3
-
-  tycho-admin-api:
-    image: tychobrahe/tycho-admin-api:latest
-    container_name: tycho-admin-api
-    platform: ${DOCKER_PLATFORM}
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.2
-    environment:
-      - SPRING_PROFILES_ACTIVE=desktop
-      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    env_file:
-      - .env
-
-  tycho-functions-api:
-    image: tychobrahe/tycho-functions-api:latest
-    container_name: tycho-functions-api
-    platform: ${DOCKER_PLATFORM}
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.51
-    volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
-      - ${DEFAULT_ROOT_FOLDER}/backup:/data/backup
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - SPRING_PROFILES_ACTIVE=desktop
-      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    env_file:
-      - .env
 
   tycho-search-front:
     image: tychobrahe/tycho-search-front:latest
@@ -100,22 +192,6 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.5
 
-  tycho-search-api:
-    image: tychobrahe/tycho-search-api:latest
-    container_name: tycho-search-api
-    platform: ${DOCKER_PLATFORM}
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.4
-    volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd/upload:/data/httpd/upload
-    environment:
-      - SPRING_PROFILES_ACTIVE=desktop
-      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    env_file:
-      - .env
-
   tycho-parser-front:
     image: tychobrahe/tycho-parser-front:latest
     container_name: tycho-parser-front
@@ -124,36 +200,6 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.7
-
-  tycho-parser-api:
-    image: tychobrahe/tycho-parser-api:latest
-    container_name: tycho-parser-api
-    platform: ${DOCKER_PLATFORM}
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.6
-    environment:
-      - SPRING_PROFILES_ACTIVE=desktop
-      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    env_file:
-      - .env
-
-  tycho-parser-engine-api:
-    image: tychobrahe/tycho-parser-engine-api:latest
-    container_name: tycho-parser-engine-api
-    platform: ${DOCKER_PLATFORM}
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.53
-    volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
-    environment:
-      - SPRING_PROFILES_ACTIVE=desktop
-      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    env_file:
-      - .env
 
   tycho-io-front:
     image: tychobrahe/tycho-io-front:latest
@@ -164,22 +210,6 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.13
 
-  tycho-io-api:
-    image: tychobrahe/tycho-io-api:latest
-    container_name: tycho-io-api
-    platform: ${DOCKER_PLATFORM}
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.12
-    volumes:
-      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
-    environment:
-      - SPRING_PROFILES_ACTIVE=desktop
-      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    env_file:
-      - .env
-
   tycho-revision-front:
     image: tychobrahe/tycho-revision-front:latest
     container_name: tycho-revision-front
@@ -188,17 +218,3 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.25
-
-  tycho-revision-api:
-    image: tychobrahe/tycho-revision-api:latest
-    container_name: tycho-revision-api
-    platform: ${DOCKER_PLATFORM}
-    restart: unless-stopped
-    networks:
-      tycho-network:
-        ipv4_address: 172.18.0.24
-    environment:
-      - SPRING_PROFILES_ACTIVE=desktop
-      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
-    env_file:
-      - .env
