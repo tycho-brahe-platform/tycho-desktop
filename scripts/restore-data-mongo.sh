@@ -5,7 +5,6 @@ database="$2"
 corpus="$3"
 localDir="$4"
 filename="$5"
-containerFolder="$5"
 
 inputDir="${localDir}input/"
 tempDir="${inputDir}temp/"
@@ -24,7 +23,7 @@ tar -zxvf "${filename}" -C "${tempDir}"
 # Import each JSON file into the MongoDB container
 for file in "${tempDir}${corpus}"/*.json; do
 	collection=$(basename "$file" .json)
-	filename="${containerFolder}input/temp/${corpus}${file##*/}"
+	filename="${localDir}input/temp/${corpus}${file##*/}"
 	docker exec -t "${container}" mongoimport --db "${database}" --collection "$collection" --file "$filename" --jsonArray --mode=upsert --upsertFields _id
 done
 
