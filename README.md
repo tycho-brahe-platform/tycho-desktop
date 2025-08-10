@@ -1,17 +1,33 @@
-# tycho-desktop
+# Tycho Brahe Platform Desktop for Syntactic Revision
 
-Tycho Brahe Platform Desktop Installation
+The Tycho Brahe Platform has a beta desktop version initially launched for **macOS**.
 
-Tasks:
+It has fewer features than the full server version and is available **only for syntactic revision**; i.e., editing and transcription are **not** available, but documents may be imported.
 
-1- Ask for the root folder to install
-2- Download compacted file from Github at address: https://github.com/tycho-brahe-platform/tycho-desktop/install/mac/tycho-desktop.tar
-3- Extract files to the root folder
-4- Create the following subfolders: ROOT_FOLDER/httpd, ROOT_FOLDER/httpd/upload, ROOT_FOLDER/httpd/parser, ROOT_FOLDER/backup
-5- Copy the shell scripts from scripts folder to ROOT_FOLDER/backup
-6- Execute the Docker Compose file: docker-compose-infra.yml
-7- Execute the Docker Compose file: docker-compose-basic.yml
-8- Open Chrome to http://local.tychoplatform.com/auth
+## Installation
 
-chmod + x installaer
-sudo add http://local.tychoplatform.com to /etc/hosts
+### macOS
+
+1. Add the local server address to your hosts file:
+
+   ```bash
+   echo "127.0.0.1 local.tychoplatform.com" | sudo tee -a /etc/hosts
+   ```
+
+2. Download the ARM64 installer script from the following URL:
+
+   [https://github.com/tycho-brahe-platform/tycho-desktop/blob/main/install/mac/installer-arm64.sh](https://github.com/tycho-brahe-platform/tycho-desktop/blob/main/install/mac/installer-arm64.sh)
+
+3. Make the downloaded installer executable:
+
+   ```bash
+   chmod +x installer-arm64.sh
+   ```
+
+4. Run the installer:
+
+   ```bash
+   ./installer-arm64.sh
+   ```
+
+5. When prompted, enter the default folder for installation as requested.
