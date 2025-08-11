@@ -8,6 +8,14 @@ It has fewer features than the full server version and is available **only for s
 
 ### macOS
 
+Before starting the installation, you must have **Docker Desktop** installed.
+
+- **Apple processors (M1, M2 and newer)**: [Download here](https://desktop.docker.com/mac/main/arm64/Docker.dmg)
+- **Intel processors**: [Download here](https://desktop.docker.com/mac/main/amd64/Docker.dmg)
+- **macOS Big Sur (v. 11) or earlier**: Install version [4.22.0 for Intel](https://desktop.docker.com/mac/main/amd64/117440/Docker.dmg)
+
+---
+
 1. Add the local server address to your hosts file:
 
    ```bash
