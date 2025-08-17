@@ -28,6 +28,12 @@ for file in "${tempDir}${corpus}"/*.json; do
 	docker exec -t "${container}" mongoimport --db "${database}" --collection "$collection" --file "$jsonFile" --jsonArray --mode=upsert --upsertFields _id
 done
 
+# Copy files folder (if it exists) preserving structure
+if [ -d "${tempDir}files" ]; then
+	echo "Restoring files into ${filesDir}"
+	rsync -av "${tempDir}files/" "${filesDir}/"
+fi
+
 # Clean up
 rm -R "${tempDir}${corpus}"
 mv "${filename}" "${filesDir}"
