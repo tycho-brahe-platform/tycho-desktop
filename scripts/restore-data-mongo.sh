@@ -29,8 +29,9 @@ for file in "${tempDir}${corpus}"/*.json; do
 done
 
 # Copy files folder (if it exists) preserving structure
-if [ -d "${tempDir}files" ]; then
+if [ -d "${tempDir}data/httpd" ]; then
 	echo "Restoring files into ${filesDir}"
+	echo "docker cp \"${tempDir}data/httpd/.\" \"$container\":/data/httpd/"
 	docker cp "${tempDir}data/httpd/." "$container":/data/httpd/
 fi
 
