@@ -42,6 +42,7 @@ services:
       - ${DEFAULT_ROOT_FOLDER}/backup:/data/backup
       - ${DEFAULT_ROOT_FOLDER}/mongo/configdb:/data/configdb
       - ${DEFAULT_ROOT_FOLDER}/mongo/db:/data/db
+      - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
 
   rabbitmq:
     build:

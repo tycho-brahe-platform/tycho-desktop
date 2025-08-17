@@ -31,7 +31,7 @@ done
 # Copy files folder (if it exists) preserving structure
 if [ -d "${tempDir}files" ]; then
 	echo "Restoring files into ${filesDir}"
-	rsync -av "${tempDir}files/" "${filesDir}/"
+	docker cp "${tempDir}data/httpd/." "$container":/data/httpd/
 fi
 
 # Clean up
