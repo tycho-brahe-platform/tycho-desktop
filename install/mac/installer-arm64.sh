@@ -6,8 +6,19 @@ TYCHO_SERVER_ADDRESS=http://local.tychoplatform.com
 
 echo "🚀 Welcome to the Tycho Desktop Installer for macOS"
 
-# Step 1: Ask for the root folder to install
-read -p "Please enter the root folder for installation (e.g., /Users/yourname/tycho): " ROOT_FOLDER
+# Detect current username
+CURRENT_USER=$(whoami)
+
+# Default folder suggestion
+DEFAULT_FOLDER="/Users/$CURRENT_USER/tycho"
+
+# Step 1: Ask for the root folder to install (with default)
+read -p "Please enter the root folder for installation [$DEFAULT_FOLDER]: " ROOT_FOLDER
+
+# If user presses Enter, use the default
+ROOT_FOLDER=${ROOT_FOLDER:-$DEFAULT_FOLDER}
+
+echo "✅ Installation folder set to: $ROOT_FOLDER"
 
 # Step 2: Download compacted file from Github
 echo "📦 Downloading the Tycho Desktop package..."
