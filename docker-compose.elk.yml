@@ -1,0 +1,44 @@
+networks:
+  tycho-network:
+    external: true
+    name: tycho-network
+
+services:
+  elasticsearch:
+    image: elasticsearch:7.10.1
+    container_name: elasticsearch
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.94
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/elk/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+
+  logstash:
+    image: logstash:7.10.1
+    container_name: logstash
+    command: -f /etc/logstash/conf.d/
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.93
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/elk/logstash.conf:/etc/logstash/conf.d
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+      - elasticsearch
+
+  kibana:
+    image: kibana:7.10.1
+    container_name: kibana
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.92
+    volumes:
+      - ${DEFAULT_ROOT_FOLDER}/elk/kibana.yml:/usr/share/kibana/config/kibana.yml
+    depends_on:
+      - logstash

@@ -146,6 +146,13 @@
       "durable": true,
       "auto_delete": false,
       "arguments": {}
+    },
+    {
+      "name": "tycho-parser-sentence",
+      "vhost": "tycho",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
     }
   ]
 }

@@ -13,12 +13,12 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.52
     environment:
-      - SPRING_PROFILES_ACTIVE=desktop
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -35,20 +35,13 @@ services:
       - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
       - ${DEFAULT_ROOT_FOLDER}/backup:/data/backup
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./wait-for-auth.sh:/wait-for-auth.sh
     environment:
-      - SPRING_PROFILES_ACTIVE=desktop
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
-    command:
-      [
-        'sh',
-        '-c',
-        'chmod +x /wait-for-service.sh && /wait-for-service.sh tycho-auth-api',
-      ]
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -64,20 +57,14 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.2
     environment:
-      - SPRING_PROFILES_ACTIVE=desktop
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
     depends_on:
       - tycho-functions-api
-    command:
-      [
-        'sh',
-        '-c',
-        'chmod +x /wait-for-service.sh && /wait-for-service.sh tycho-functions-api',
-      ]
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -91,20 +78,14 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.30
     environment:
-      - SPRING_PROFILES_ACTIVE=desktop
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
     depends_on:
       - tycho-admin-api
-    command:
-      [
-        'sh',
-        '-c',
-        'chmod +x /wait-for-service.sh && /wait-for-service.sh tycho-admin-api',
-      ]
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -120,20 +101,14 @@ services:
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
     environment:
-      - SPRING_PROFILES_ACTIVE=desktop
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
     depends_on:
       - tycho-catalog-api
-    command:
-      [
-        'sh',
-        '-c',
-        'chmod +x /wait-for-service.sh && /wait-for-service.sh tycho-catalog-api',
-      ]
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -147,20 +122,14 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.6
     environment:
-      - SPRING_PROFILES_ACTIVE=desktop
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
     depends_on:
       - tycho-parser-engine-api
-    command:
-      [
-        'sh',
-        '-c',
-        'chmod +x /wait-for-service.sh && /wait-for-service.sh tycho-parser-engine-api',
-      ]
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -174,20 +143,14 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.24
     environment:
-      - SPRING_PROFILES_ACTIVE=desktop
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
     depends_on:
       - tycho-parser-api
-    command:
-      [
-        'sh',
-        '-c',
-        'chmod +x /wait-for-service.sh && /wait-for-service.sh tycho-parser-api',
-      ]
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -203,20 +166,14 @@ services:
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/httpd/upload:/data/httpd/upload
     environment:
-      - SPRING_PROFILES_ACTIVE=desktop
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
     depends_on:
       - tycho-revision-api
-    command:
-      [
-        'sh',
-        '-c',
-        'chmod +x /wait-for-service.sh && /wait-for-service.sh tycho-revision-api',
-      ]
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -232,20 +189,14 @@ services:
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/httpd:/data/httpd
     environment:
-      - SPRING_PROFILES_ACTIVE=desktop
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
       - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
     env_file:
       - .env
     depends_on:
       - tycho-search-api
-    command:
-      [
-        'sh',
-        '-c',
-        'chmod +x /wait-for-service.sh && /wait-for-service.sh tycho-search-api',
-      ]
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:8080/actuator/health']
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 5

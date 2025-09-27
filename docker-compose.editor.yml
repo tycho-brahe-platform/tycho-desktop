@@ -1,0 +1,171 @@
+networks:
+  tycho-network:
+    external: true
+    name: tycho-network
+
+services:
+  tycho-edictor-api:
+    image: tychobrahe/tycho-edictor-api:latest
+    container_name: tycho-edictor-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.8
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  tycho-translation-api:
+    image: tychobrahe/tycho-translation-api:latest
+    container_name: tycho-translation-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.42
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - tycho-edictor-api
+
+  tycho-transcriber-api:
+    image: tychobrahe/tycho-transcriber-api:latest
+    container_name: tycho-transcriber-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.32
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - tycho-translation-api
+
+  tycho-sentence-api:
+    image: tychobrahe/tycho-sentence-api:latest
+    container_name: tycho-sentence-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.38
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - tycho-transcriber-api
+
+  tycho-viewer-api:
+    image: tychobrahe/tycho-viewer-api:latest
+    container_name: tycho-viewer-api
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.22
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
+      - JAVA_TOOL_OPTIONS=${COMMON_JAVA_OPTS}
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - tycho-sentence-api
+
+  tycho-revision-front:
+    image: tychobrahe/tycho-revision-front:latest
+    container_name: tycho-revision-front
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.25
+
+  tycho-edictor-front:
+    image: tychobrahe/tycho-edictor-front:latest
+    container_name: tycho-edictor-front
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.9
+
+  tycho-browser-front:
+    image: tychobrahe/tycho-browser-front:latest
+    container_name: tycho-browser-front
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.23
+
+  tycho-synviewer-front:
+    image: tychobrahe/tycho-synviewer-front:latest
+    container_name: tycho-synviewer-front
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.49
+
+  tycho-sentence-front:
+    image: tychobrahe/tycho-sentence-front:latest
+    container_name: tycho-sentence-front
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.37
+
+  tycho-transcriber-front:
+    image: tychobrahe/tycho-transcriber-front:latest
+    container_name: tycho-transcriber-front
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.33
+
+  tycho-translation-front:
+    image: tychobrahe/tycho-translation-front:latest
+    container_name: tycho-translation-front
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.43
