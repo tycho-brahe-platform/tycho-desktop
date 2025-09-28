@@ -169,3 +169,21 @@ services:
     networks:
       tycho-network:
         ipv4_address: 172.18.0.43
+
+  tycho-portal-front:
+    image: tychobrahe/tycho-portal-front:${FRONT_TAG}
+    container_name: tycho-portal-front
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.29
+
+  tycho-reserved-front:
+    image: tychobrahe/tycho-reserved-front:${FRONT_TAG}
+    container_name: tycho-reserved-front
+    platform: ${DOCKER_PLATFORM}
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.19
