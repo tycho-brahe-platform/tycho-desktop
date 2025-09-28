@@ -4,6 +4,7 @@ set -e
 export DOCKER_PLATFORM="linux/arm64"
 TYCHO_SERVER_ADDRESS=http://local.tychoplatform.com
 PROFILE=desktop
+FRONT_TAG=desktop
 
 echo "🚀 Welcome to the Tycho Desktop Installer for macOS"
 
@@ -44,6 +45,7 @@ export DEFAULT_ROOT_FOLDER="$ROOT_FOLDER"
 
 # Update .env
 echo "PROFILE=${PROFILE}" >> "$ROOT_FOLDER/.env"
+echo "FRONT_TAG=${FRONT_TAG}" >> "$ROOT_FOLDER/.env"
 ENV_FILE="$ROOT_FOLDER/.env"
 if [ ! -f "$ENV_FILE" ]; then
   echo "❌ .env file not found at $ENV_FILE"

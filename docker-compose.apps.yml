@@ -202,7 +202,7 @@ services:
       retries: 5
 
   tycho-auth-front:
-    image: tychobrahe/tycho-auth-front:latest
+    image: tychobrahe/tycho-auth-front:${FRONT_TAG}
     container_name: tycho-auth-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -211,7 +211,7 @@ services:
         ipv4_address: 172.18.0.55
 
   tycho-catalog-front:
-    image: tychobrahe/tycho-catalog-front:latest
+    image: tychobrahe/tycho-catalog-front:${FRONT_TAG}
     container_name: tycho-catalog-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -220,7 +220,7 @@ services:
         ipv4_address: 172.18.0.31
 
   tycho-admin-front:
-    image: tychobrahe/tycho-admin-front:latest
+    image: tychobrahe/tycho-admin-front:${FRONT_TAG}
     container_name: tycho-admin-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -229,7 +229,7 @@ services:
         ipv4_address: 172.18.0.3
 
   tycho-search-front:
-    image: tychobrahe/tycho-search-front:latest
+    image: tychobrahe/tycho-search-front:${FRONT_TAG}
     container_name: tycho-search-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -238,7 +238,7 @@ services:
         ipv4_address: 172.18.0.5
 
   tycho-parser-front:
-    image: tychobrahe/tycho-parser-front:latest
+    image: tychobrahe/tycho-parser-front:${FRONT_TAG}
     container_name: tycho-parser-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -247,7 +247,7 @@ services:
         ipv4_address: 172.18.0.7
 
   tycho-io-front:
-    image: tychobrahe/tycho-io-front:latest
+    image: tychobrahe/tycho-io-front:${FRONT_TAG}
     container_name: tycho-io-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -256,7 +256,7 @@ services:
         ipv4_address: 172.18.0.13
 
   tycho-revision-front:
-    image: tychobrahe/tycho-revision-front:latest
+    image: tychobrahe/tycho-revision-front:${FRONT_TAG}
     container_name: tycho-revision-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped

@@ -4,6 +4,7 @@ set -e
 export DOCKER_PLATFORM="linux/amd64"
 TYCHO_SERVER_ADDRESS=http://local.tychoplatform.com
 PROFILE=develop
+FRONT_TAG=latest
 
 echo "🚀 Welcome to the Tycho Server Installer for Linux"
 
@@ -41,6 +42,7 @@ export DEFAULT_ROOT_FOLDER="$ROOT_FOLDER"
 
 # Update .env
 echo "PROFILE=${PROFILE}" >> "$ROOT_FOLDER/.env"
+echo "FRONT_TAG=${FRONT_TAG}" >> "$ROOT_FOLDER/.env"
 ENV_FILE="$ROOT_FOLDER/.env"
 if [ ! -f "$ENV_FILE" ]; then
   echo "❌ .env file not found at $ENV_FILE"

@@ -108,7 +108,7 @@ services:
       - tycho-sentence-api
 
   tycho-revision-front:
-    image: tychobrahe/tycho-revision-front:latest
+    image: tychobrahe/tycho-revision-front:${FRONT_TAG}
     container_name: tycho-revision-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -117,7 +117,7 @@ services:
         ipv4_address: 172.18.0.25
 
   tycho-edictor-front:
-    image: tychobrahe/tycho-edictor-front:latest
+    image: tychobrahe/tycho-edictor-front:${FRONT_TAG}
     container_name: tycho-edictor-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -126,7 +126,7 @@ services:
         ipv4_address: 172.18.0.9
 
   tycho-browser-front:
-    image: tychobrahe/tycho-browser-front:latest
+    image: tychobrahe/tycho-browser-front:${FRONT_TAG}
     container_name: tycho-browser-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -134,9 +134,9 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.23
 
-  tycho-synviewer-front:
-    image: tychobrahe/tycho-synviewer-front:latest
-    container_name: tycho-synviewer-front
+  tycho-syntrees-front:
+    image: tychobrahe/tycho-syntrees-front:${FRONT_TAG}
+    container_name: tycho-syntrees-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
     networks:
@@ -144,7 +144,7 @@ services:
         ipv4_address: 172.18.0.49
 
   tycho-sentence-front:
-    image: tychobrahe/tycho-sentence-front:latest
+    image: tychobrahe/tycho-sentence-front:${FRONT_TAG}
     container_name: tycho-sentence-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -153,7 +153,7 @@ services:
         ipv4_address: 172.18.0.37
 
   tycho-transcriber-front:
-    image: tychobrahe/tycho-transcriber-front:latest
+    image: tychobrahe/tycho-transcriber-front:${FRONT_TAG}
     container_name: tycho-transcriber-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
@@ -162,7 +162,7 @@ services:
         ipv4_address: 172.18.0.33
 
   tycho-translation-front:
-    image: tychobrahe/tycho-translation-front:latest
+    image: tychobrahe/tycho-translation-front:${FRONT_TAG}
     container_name: tycho-translation-front
     platform: ${DOCKER_PLATFORM}
     restart: unless-stopped
