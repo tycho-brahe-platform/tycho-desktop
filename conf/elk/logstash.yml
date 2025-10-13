@@ -1,0 +1,16 @@
+log.level: info
+pipeline.ordered: auto
+path.config: /usr/share/logstash/pipeline
+
+# Pipeline settings
+pipeline.workers: 2
+pipeline.batch.size: 125
+pipeline.batch.delay: 5
+
+# Elasticsearch for monitoring (if using)
+monitoring.elasticsearch.hosts: ['http://elasticsearch:9200']
+
+# If security is enabled:
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.username: 'elastic'
+xpack.monitoring.elasticsearch.password: ${ELASTIC_PASSWORD}

@@ -44,6 +44,7 @@ chmod +x "$ROOT_FOLDER/backup/"*.sh
 export DEFAULT_ROOT_FOLDER="$ROOT_FOLDER"
 
 # Update .env
+echo "" >> "$ROOT_FOLDER/.env"
 echo "PROFILE=${PROFILE}" >> "$ROOT_FOLDER/.env"
 echo "FRONT_TAG=${FRONT_TAG}" >> "$ROOT_FOLDER/.env"
 ENV_FILE="$ROOT_FOLDER/.env"

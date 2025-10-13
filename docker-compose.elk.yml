@@ -5,19 +5,44 @@ networks:
 
 services:
   elasticsearch:
-    image: elasticsearch:7.10.1
+    image: elasticsearch:9.1.5
     container_name: elasticsearch
     restart: unless-stopped
     networks:
       tycho-network:
         ipv4_address: 172.18.0.94
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-s",
+          "-u",
+          "elastic:${ELASTIC_PASSWORD}",
+          "http://localhost:9200/_cluster/health",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/elk/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ${DEFAULT_ROOT_FOLDER}/elk/esdata:/usr/share/elasticsearch/data
+    env_file:
+      - .env
     environment:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+    command: >
+      bash -c "
+      /usr/local/bin/docker-entrypoint.sh elasticsearch &
+      sleep 20 &&
+      curl -s -u elastic:${ELASTIC_PASSWORD} -X POST 'http://localhost:9200/_security/user/kibana_system/_password'
+           -H 'Content-Type: application/json'
+           -d '{\"password\":\"${ELASTIC_PASSWORD}\"}' || true &&
+      wait
+      "
 
   logstash:
-    image: logstash:7.10.1
+    image: logstash:9.1.5
     container_name: logstash
     command: -f /etc/logstash/conf.d/
     restart: unless-stopped
@@ -25,14 +50,19 @@ services:
       tycho-network:
         ipv4_address: 172.18.0.93
     volumes:
-      - ${DEFAULT_ROOT_FOLDER}/elk/logstash.conf:/etc/logstash/conf.d
+      - ${DEFAULT_ROOT_FOLDER}/elk/logstash:/etc/logstash/conf.d
+      - ${DEFAULT_ROOT_FOLDER}/elk/logstash.yml:/usr/share/logstash/config/logstash.yml
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      - LS_JAVA_OPTS=-Xmx256m -Xms256m
+      - ELASTICSEARCH_USERNAME=logstash_internal
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+    env_file:
+      - .env
     depends_on:
       - elasticsearch
 
   kibana:
-    image: kibana:7.10.1
+    image: kibana:9.1.5
     container_name: kibana
     restart: unless-stopped
     networks:
@@ -40,5 +70,10 @@ services:
         ipv4_address: 172.18.0.92
     volumes:
       - ${DEFAULT_ROOT_FOLDER}/elk/kibana.yml:/usr/share/kibana/config/kibana.yml
+    environment:
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${ELASTIC_PASSWORD}
+    env_file:
+      - .env
     depends_on:
-      - logstash
+      - elasticsearch
