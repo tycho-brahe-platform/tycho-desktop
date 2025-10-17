@@ -30,11 +30,12 @@ unzip -q tycho-server.zip -d "$ROOT_FOLDER"
 
 # Step 4: Create subfolders
 echo "📁 Creating subfolders..."
-mkdir -p "$ROOT_FOLDER/httpd" "$ROOT_FOLDER/httpd/upload" "$ROOT_FOLDER/httpd/parser" "$ROOT_FOLDER/backup" "$ROOT_FOLDER/elk/esdata"
+mkdir -p "$ROOT_FOLDER/httpd" "$ROOT_FOLDER/httpd/upload" "$ROOT_FOLDER/httpd/parser" "$ROOT_FOLDER/backup" "$ROOT_FOLDER/elk" "$ROOT_FOLDER/elk/esdata"
 
 # Step 5: Copy shell scripts from 'scripts' folder to 'ROOT_FOLDER/backup'
-echo "🔧 Copying shell scripts..."
+echo "🔧 Copying files and scripts..."
 cp -R "$ROOT_FOLDER/scripts/"* "$ROOT_FOLDER/backup"
+cp -R "$ROOT_FOLDER/conf/elk/"* "$ROOT_FOLDER/elk"
 chmod +x "$ROOT_FOLDER/backup/"*.sh
 
 # Step 6: Export the input to DEFAULT_ROOT_FOLDER
