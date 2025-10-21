@@ -76,7 +76,7 @@ services:
     restart: unless-stopped
     networks:
       tycho-network:
-        ipv4_address: 172.18.0.85
+        ipv4_address: 172.18.0.83
     volumes:
       - /DEFAULT_ROOT_FOLDER/redis:/data
     ports:
