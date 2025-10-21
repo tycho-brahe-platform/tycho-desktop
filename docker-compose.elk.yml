@@ -68,3 +68,16 @@ services:
       - .env
     depends_on:
       - elasticsearch
+
+  redis:
+    image: redis:8.0.1-alpine
+    container_name: redis
+    command: ["redis-server", "--requirepass", "TPRovENTrIcu"]
+    restart: unless-stopped
+    networks:
+      tycho-network:
+        ipv4_address: 172.18.0.85
+    volumes:
+      - /DEFAULT_ROOT_FOLDER/redis:/data
+    ports:
+      - "6379:6379"
