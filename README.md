@@ -20,15 +20,46 @@ Pre-built installers are available on the [**Releases**](https://github.com/tych
 
 > **Note:** The links above point to `v1.0.0`. For the latest version, go to [Releases](https://github.com/tycho-brahe-platform/tycho-desktop/releases) and use the download links in the Assets section of the newest release.
 
-## Parser download
-
-To use syntactic parsing, you need to install at least one parser. Parser packages (e.g. `parser-parsport.tar.gz`, `parser-synoi.tar.gz`) are available in the **Assets** of each [Release](https://github.com/tycho-brahe-platform/tycho-desktop/releases). Download the parser(s) you need, then in Tycho Syntactic Desktop go to **Settings** (or **Options**) and add or point to the folder where you extracted the parser files.
-
 ## Installation
 
 - **Windows:** Run the `.exe` installer and follow the setup wizard.
 - **macOS:** Open the `.dmg` file and drag the app to your Applications folder.
 - **Linux:** Make the AppImage executable (`chmod +x *.AppImage`), then run it.
+
+## Quick Start
+
+Follow these steps to get started with syntactic analysis: create a parser, create a corpus, and import your files.
+
+### Step 1: Create a parser
+
+1. Download a parser package from the [Releases](https://github.com/tycho-brahe-platform/tycho-desktop/releases) page (e.g. `parser-parsport.tar.gz`, `parser-synoi.tar.gz`) in the **Assets** section.
+2. Extract the downloaded archive to a folder on your computer.
+3. Open Tycho Syntactic Desktop and go to **Parsers** (apps menu → Parsers).
+4. Click the **Create** button.
+5. Enter a name for your parser (e.g. "Parsport").
+6. Click **Browse** and select the folder where you extracted the parser files.
+7. Confirm to create the parser.
+
+### Step 2: Create a corpus
+
+1. Go to **Corpora** (apps menu → Corpora, or the Home screen).
+2. Click the **Create** button.
+3. Enter a name for your corpus (e.g. "My Corpus").
+4. Click **Browse** and select a folder that will serve as the corpus upload directory (this is where imported documents will be stored).
+5. Confirm to create the corpus.
+
+### Step 3: Import files from a folder
+
+1. On the Corpora screen, click on the corpus card you created to open its catalog.
+2. Click the **Settings** button (top right).
+3. In the left menu, select **Files Import**.
+4. Choose the file type to import:
+   - **PSD files** — for plain text or PSD-format files (`.psd`, `.txt`)
+   - **JSON files** — for Tycho JSON format files (`.json`)
+5. Click **Browse** and select the folder containing the files you want to import.
+6. Confirm to start the import. The app will process all matching files in the folder and add them as documents to your corpus.
+
+Once the import completes, you can open documents from the catalog, run syntactic parsing with your parser, and use the Search tool to query your corpus.
 
 ## License
 
