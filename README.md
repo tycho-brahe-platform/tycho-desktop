@@ -12,10 +12,10 @@ Pre-built installers are available on the [**Releases**](https://github.com/tych
 
 | Platform                  | File to download                                                                                                                                          |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Windows (x64)**         | [tycho-syntactic-setup-1.0.0-x64.exe](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-x64-1.0.0.exe)       |
-| **Windows (x86)**         | [tycho-syntactic-setup-1.0.0-x86.exe](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-x86-1.0.0.exe)       |
-| **macOS (Apple Silicon)** | [Tycho Syntactic Desktop-1.0.0-arm64.dmg](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-arm64-1.0.0.dmg) |
-| **macOS (Intel)**         | [Tycho Syntactic Desktop-1.0.0-x64.dmg](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-amd64-1.0.0.dmg)   |
+| **Windows (x64)**         | [tycho-syntactic-x64-1.0.0.exe](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-x64-1.0.0.exe)             |
+| **Windows (x86)**         | [tycho-syntactic-x86-1.0.0.exe](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-x86-1.0.0.exe)             |
+| **macOS (Apple Silicon)** | [tycho-syntactic-arm64-1.0.0.dmg](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-arm64-1.0.0.dmg)         |
+| **macOS (Intel)**         | [tycho-syntactic-amd64-1.0.0.dmg](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-amd64-1.0.0.dmg)         |
 | **Linux**                 | [Tycho Syntactic Desktop-1.0.0-x86_64.AppImage](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-1.0.0.exe) |
 
 > **Note:** The links above point to `v1.0.0`. For the latest version, go to [Releases](https://github.com/tycho-brahe-platform/tycho-desktop/releases) and use the download links in the Assets section of the newest release.
@@ -32,7 +32,7 @@ Follow these steps to get started with syntactic analysis: create a parser, crea
 
 ### Step 1: Create a parser
 
-1. Download a parser package from the [Releases](https://github.com/tycho-brahe-platform/tycho-desktop/releases) page (e.g. `parser-parsport.tar.gz`, `parser-synoi.tar.gz`) in the **Assets** section.
+1. Download a parser package from the [Available Parsers](https://github.com/tycho-brahe-platform/tycho-desktop/tree/main/parsers) page (e.g. `parser-parsport.tar.gz`, `parser-synoi.tar.gz`) in the **Assets** section.
 2. Extract the downloaded archive to a folder on your computer.
 3. Open Tycho Syntactic Desktop and go to **Parsers** (apps menu → Parsers).
 4. Click the **Create** button.
@@ -60,6 +60,30 @@ Follow these steps to get started with syntactic analysis: create a parser, crea
 6. Confirm to start the import. The app will process all matching files in the folder and add them as documents to your corpus.
 
 Once the import completes, you can open documents from the catalog, run syntactic parsing with your parser, and use the Search tool to query your corpus.
+
+## Running a search
+
+1. **Open a corpus** — On the home screen, click a corpus card to open its **catalog** (document list).
+2. **Go to Search** — In the catalog toolbar, click **Search**. The app synchronizes the corpus with the local search index; when sync finishes, the **Search** screen opens.
+3. **Choose a search mode** — At the top of the Search screen, pick one of:
+   - **Basic Search** — Enter a text query in the field.
+   - **Syntactic Search** — Build rules (criteria, values, AND/OR groups) for structured queries.
+   - **Corpus Search** — Enter a **Node** (optional) and **Query** (required) in the fields provided.
+4. **Execute** — Click **Execute Search**. Results appear on the **Results** screen. You can use **Filter**, **Settings**, **Favorites**, and **Export** from the top bar on the Search/Results flow as needed.
+
+> You need a corpus selected (opened from the home screen) before running a search. Documents should be parsed or imported so the index has data to search.
+
+## Becoming a registered user
+
+Registration is optional and is not required on first launch. You sign in with **email and a one-time verification code** (no separate “signup” screen—new addresses are registered when you complete verification).
+
+1. Click the **apps** menu icon (top-left).
+2. Find the **Sign in** row (account icon). Click the row or **Open**.
+3. In **Sign in with email**, enter your email address and click **Send code**.
+4. Check your inbox for the verification code from the email provider.
+5. Enter the code and click **Verify**.
+
+After you sign in, the apps menu shows your email and a **Sign out** option. You need network access for the email verification step.
 
 ## License
 
