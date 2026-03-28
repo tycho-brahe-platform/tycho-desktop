@@ -7,18 +7,18 @@ Tycho Syntactic Desktop is a desktop application for syntactic analysis, part of
 Pre-built installers are available on the [**Releases**](https://github.com/tycho-brahe-platform/tycho-desktop/releases) page.
 
 1. Go to [Releases](https://github.com/tycho-brahe-platform/tycho-desktop/releases)
-2. Open the latest release (e.g. `v1.0.0`)
+2. Open the latest release (e.g. `v1.1.0`)
 3. In the **Assets** section, download the file for your system:
 
 | Platform                  | File to download                                                                                                                                          |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Windows (x64)**         | [tycho-syntactic-x64-1.0.0.exe](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-x64-1.0.0.exe)             |
-| **Windows (x86)**         | [tycho-syntactic-x86-1.0.0.exe](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-x86-1.0.0.exe)             |
-| **macOS (Apple Silicon)** | [tycho-syntactic-arm64-1.0.0.dmg](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-arm64-1.0.0.dmg)         |
-| **macOS (Intel)**         | [tycho-syntactic-amd64-1.0.0.dmg](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-amd64-1.0.0.dmg)         |
-| **Linux**                 | [Tycho Syntactic Desktop-1.0.0-x86_64.AppImage](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.0.0/tycho-syntactic-1.0.0.exe) |
+| **Windows (x64)**         | [tycho-syntactic-x64-1.1.0.exe](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.1.0/tycho-syntactic-x64-1.1.0.exe)             |
+| **Windows (x86)**         | [tycho-syntactic-x86-1.1.0.exe](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.1.0/tycho-syntactic-x86-1.1.0.exe)             |
+| **macOS (Apple Silicon)** | [tycho-syntactic-arm64-1.1.0.dmg](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.1.0/tycho-syntactic-arm64-1.1.0.dmg)         |
+| **macOS (Intel)**         | [tycho-syntactic-amd64-1.1.0.dmg](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.1.0/tycho-syntactic-amd64-1.1.0.dmg)         |
+| **Linux**                 | [tycho-syntactic-amd64-1.1.0.AppImage](https://github.com/tycho-brahe-platform/tycho-desktop/releases/download/v1.1.0/tycho-syntactic-amd64-1.1.0.AppImage) |
 
-> **Note:** The links above point to `v1.0.0`. For the latest version, go to [Releases](https://github.com/tycho-brahe-platform/tycho-desktop/releases) and use the download links in the Assets section of the newest release.
+> **Note:** The links above point to `v1.1.0`. For the latest version, go to [Releases](https://github.com/tycho-brahe-platform/tycho-desktop/releases) and use the download links in the Assets section of the newest release.
 
 ## Installation
 
